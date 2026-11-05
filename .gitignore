@@ -10,3 +10,10 @@ server/data/*.db
 server/data/*.db-shm
 server/data/*.db-wal
 server/data/*.db-journal
+
+# Deployment secrets and platform state
+.env
+.env.*
+!.env.test
+!.env.example
+.vercel

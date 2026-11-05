@@ -1,3 +1,4 @@
+import { seedAccounts } from './bootstrap'
 import { app } from './app'
 import { startClock, stopClock } from './clock'
 import { NODE_ENV, PORT } from './config'
@@ -11,7 +12,9 @@ import { NODE_ENV, PORT } from './config'
  * suite never has a timer advancing the simulation underneath it.
  */
 
-const server = app.listen(PORT, () => {
+if (process.env.SEED_DEMO_ACCOUNTS === 'true') seedAccounts()
+
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`[api] BUSINESSLIFE API listening on http://localhost:${PORT} (${NODE_ENV})`)
   startClock()
   console.log('[sim] world clock running')
