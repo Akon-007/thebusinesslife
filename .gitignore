@@ -1,0 +1,12 @@
+node_modules
+dist
+.tools
+.vite
+*.local
+.DS_Store
+
+# Local SQLite databases and their journals — data, never source
+server/data/*.db
+server/data/*.db-shm
+server/data/*.db-wal
+server/data/*.db-journal

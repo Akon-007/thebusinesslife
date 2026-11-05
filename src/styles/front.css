@@ -1,0 +1,1052 @@
+/**
+ * Front-of-house styling: everything the player sees before they enter the
+ * city — landing, sign-up, verification, sign-in.
+ *
+ * Palette: navy #101B35, blue #315BEA, orange #F5A623, green #32B879,
+ * light #F4F5F8, white, muted grey #8A91A1.
+ *
+ * The front desk has its own vocabulary — it is marketing, not the HUD — but
+ * it answers to the same `data-theme` switch as the rest of the app, so a
+ * player who chose light does not meet a dark sign-in page on the way in.
+ */
+
+.front {
+  --navy: #101b35;
+  --navy-soft: #1b2a4d;
+  --blue: #315bea;
+  --blue-dark: #2447c4;
+  --orange: #f5a623;
+  --green: #32b879;
+  --red: #e0483d;
+  --bg: #f4f5f8;
+  --white: #ffffff;
+  --muted: #8a91a1;
+  --line: #e3e6ee;
+
+  /* body copy and control surfaces that are not simply --white */
+  --fo-body: #4a5470;
+  --fo-input: #fbfcfe;
+  --fo-placeholder: #aab1c0;
+
+  /* accent washes, kept separate from the accent itself so a tinted
+     background can be tuned per theme without touching the accent colour */
+  --fo-blue-wash: rgba(49, 91, 234, 0.09);
+  --fo-blue-hover: rgba(49, 91, 234, 0.1);
+  --fo-blue-ring: rgba(49, 91, 234, 0.14);
+  --fo-blue-soft: rgba(49, 91, 234, 0.06);
+  --fo-amber-wash: rgba(245, 166, 35, 0.14);
+  --fo-green-wash: rgba(50, 184, 121, 0.14);
+  --fo-amber-ink: #b9761a;
+  --fo-green-ink: #21835a;
+  --fo-strength-mid: #7cc4e8;
+  --fo-on-blue: #ffffff;
+  --fo-on-green: #ffffff;
+
+  /* message banners */
+  --fo-error-bg: rgba(224, 72, 61, 0.08);
+  --fo-error-line: rgba(224, 72, 61, 0.28);
+  --fo-error-ink: #a5301f;
+  --fo-notice-bg: rgba(50, 184, 121, 0.1);
+  --fo-notice-line: rgba(50, 184, 121, 0.3);
+  --fo-notice-ink: #1d6f4c;
+  --fo-devnote-bg: rgba(245, 166, 35, 0.12);
+  --fo-devnote-line: rgba(245, 166, 35, 0.55);
+  --fo-devnote-ink: #8a5a10;
+
+  /* the CSS-built isometric illustration */
+  --fo-iso-from: #e8ecf6;
+  --fo-iso-to: #dfe5f3;
+  --fo-iso-tile-a: #cfd8ea;
+  --fo-iso-tile-b: #c4cfe6;
+
+  --radius: 14px;
+  --shadow: 0 10px 30px rgba(16, 27, 53, 0.1);
+  --shadow-lg: 0 24px 60px rgba(16, 27, 53, 0.16);
+
+  min-height: 100vh;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: var(--bg);
+  color: var(--navy);
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Dark front desk. The accent hues lighten because they are read as ink on a
+ * near-black page; the surfaces invert to the same night the HUD lives in.
+ */
+[data-theme='dark'] .front {
+  --navy: #e9eff8;
+  --navy-soft: #243049;
+  --blue: #6d8dff;
+  --blue-dark: #8aa4ff;
+  --orange: #f5a623;
+  --green: #34d399;
+  --red: #f87171;
+  --bg: #0b1220;
+  --white: #131c2c;
+  --muted: #9db0c6;
+  --line: rgba(255, 255, 255, 0.12);
+
+  --fo-body: #b9c4d6;
+  --fo-input: #0f1726;
+  --fo-placeholder: #5c6b82;
+
+  --fo-blue-wash: rgba(109, 141, 255, 0.16);
+  --fo-blue-hover: rgba(109, 141, 255, 0.18);
+  --fo-blue-ring: rgba(109, 141, 255, 0.24);
+  --fo-blue-soft: rgba(109, 141, 255, 0.12);
+  --fo-amber-wash: rgba(245, 166, 35, 0.18);
+  --fo-green-wash: rgba(52, 211, 153, 0.16);
+  --fo-amber-ink: #ffc46b;
+  --fo-green-ink: #8ff0c6;
+  --fo-strength-mid: #7cc4e8;
+  /* both accents are bright in the dark theme, so their labels flip to ink */
+  --fo-on-blue: #0b1220;
+  --fo-on-green: #04231a;
+
+  --fo-error-bg: rgba(248, 113, 113, 0.12);
+  --fo-error-line: rgba(248, 113, 113, 0.32);
+  --fo-error-ink: #ffb3ad;
+  --fo-notice-bg: rgba(52, 211, 153, 0.12);
+  --fo-notice-line: rgba(52, 211, 153, 0.3);
+  --fo-notice-ink: #8ff0c6;
+  --fo-devnote-bg: rgba(245, 166, 35, 0.14);
+  --fo-devnote-line: rgba(245, 166, 35, 0.5);
+  --fo-devnote-ink: #ffc46b;
+
+  --fo-iso-from: #16203a;
+  --fo-iso-to: #101828;
+  --fo-iso-tile-a: #1e2b47;
+  --fo-iso-tile-b: #1a2540;
+
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.front *,
+.front *::before,
+.front *::after {
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------- top bar */
+
+.fo-topbar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 34px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.fo-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  font-size: 15px;
+}
+
+.fo-brand__mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(140deg, var(--blue), var(--navy));
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.fo-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --------------------------------------------------------------- buttons */
+
+.fo-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 11px 20px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    background 0.16s ease,
+    box-shadow 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.fo-btn:active {
+  transform: translateY(1px);
+}
+
+.fo-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.fo-btn--primary {
+  background: var(--blue);
+  color: var(--fo-on-blue);
+  box-shadow: 0 8px 20px var(--fo-blue-ring);
+}
+
+.fo-btn--primary:hover:not(:disabled) {
+  background: var(--blue-dark);
+}
+
+.fo-btn--ghost {
+  background: transparent;
+  color: var(--navy);
+  border-color: var(--line);
+}
+
+.fo-btn--ghost:hover:not(:disabled) {
+  border-color: var(--navy);
+}
+
+.fo-btn--block {
+  display: block;
+  width: 100%;
+}
+
+.fo-btn--sm {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+.fo-btn--google {
+  background: var(--white);
+  border-color: var(--line);
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.fo-btn--google:hover:not(:disabled) {
+  border-color: var(--navy);
+}
+
+/* ------------------------------------------------------------------ hero */
+
+.fo-hero {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 70px 34px 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 54px;
+  align-items: center;
+}
+
+.fo-hero__eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+  background: var(--fo-blue-wash);
+  padding: 7px 13px;
+  border-radius: 999px;
+}
+
+.fo-hero__title {
+  font-size: clamp(38px, 5.4vw, 60px);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+  margin: 20px 0 16px;
+  font-weight: 800;
+}
+
+.fo-hero__title em {
+  font-style: normal;
+  color: var(--blue);
+}
+
+.fo-hero__sub {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--fo-body);
+  max-width: 46ch;
+  margin: 0 0 28px;
+}
+
+.fo-hero__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.fo-hero__hint {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 14px;
+}
+
+/* Illustration panel: an isometric city block built from CSS, no assets. */
+
+.fo-iso {
+  position: relative;
+  height: 340px;
+  border-radius: 20px;
+  background: linear-gradient(165deg, var(--fo-iso-from), var(--fo-iso-to));
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.fo-iso__sun {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 74% 20%, rgba(245, 166, 35, 0.35), transparent 46%);
+}
+
+.fo-iso__ground {
+  position: absolute;
+  left: 50%;
+  top: 56%;
+  width: 300px;
+  height: 300px;
+  transform: translate(-50%, -50%) rotateX(58deg) rotateZ(45deg);
+  background: repeating-conic-gradient(
+    from 0deg,
+    var(--fo-iso-tile-a) 0deg 90deg,
+    var(--fo-iso-tile-b) 90deg 180deg
+  );
+  background-size: 60px 60px;
+  border-radius: 10px;
+}
+
+.fo-iso__block {
+  position: absolute;
+  border-radius: 4px;
+  box-shadow: 0 12px 22px rgba(16, 27, 53, 0.18);
+}
+
+.fo-iso__block--blue {
+  background: var(--blue);
+}
+
+.fo-iso__block--navy {
+  background: var(--navy);
+}
+
+.fo-iso__block--orange {
+  background: var(--orange);
+}
+
+.fo-iso__block--green {
+  background: var(--green);
+}
+
+.fo-iso__block--white {
+  background: var(--white);
+}
+
+.fo-iso__pin {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50% 50% 50% 2px;
+  transform: rotate(-45deg);
+  border: 2.5px solid #fff;
+  box-shadow: 0 3px 8px rgba(16, 27, 53, 0.3);
+  animation: fo-bob 2.6s ease-in-out infinite;
+}
+
+@keyframes fo-bob {
+  0%,
+  100% {
+    transform: rotate(-45deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-45deg) translateY(-6px);
+  }
+}
+
+/* ----------------------------------------------------------------- cards */
+
+.fo-section {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 26px 34px 20px;
+}
+
+.fo-section__title {
+  font-size: 22px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+
+.fo-section__sub {
+  color: var(--muted);
+  font-size: 14.5px;
+  margin: 0 0 22px;
+}
+
+.fo-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 18px;
+}
+
+.fo-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.fo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.fo-card__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  margin-bottom: 14px;
+  background: var(--fo-blue-hover);
+  color: var(--blue);
+}
+
+.fo-card--orange .fo-card__icon {
+  background: var(--fo-amber-wash);
+  color: var(--fo-amber-ink);
+}
+
+.fo-card--green .fo-card__icon {
+  background: var(--fo-green-wash);
+  color: var(--fo-green-ink);
+}
+
+.fo-card__title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 7px;
+}
+
+.fo-card__body {
+  font-size: 14px;
+  line-height: 1.58;
+  color: var(--fo-body);
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------- footer */
+
+.fo-footer {
+  max-width: 1180px;
+  margin: 40px auto 0;
+  padding: 24px 34px 46px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.fo-footer__links {
+  margin-left: auto;
+  display: flex;
+  gap: 18px;
+}
+
+.fo-footer a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.fo-footer a:hover {
+  color: var(--navy);
+}
+
+/* ------------------------------------------------------------------ auth */
+
+.fo-auth {
+  min-height: 100vh;
+  height: auto;
+  overflow: visible;
+  display: grid;
+  place-items: center;
+  padding: 40px 20px 60px;
+}
+
+.fo-auth__shell {
+  width: 100%;
+  max-width: 452px;
+}
+
+.fo-auth__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+.fo-auth__card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+}
+
+.fo-auth__title {
+  font-size: 25px;
+  font-weight: 780;
+  letter-spacing: -0.02em;
+  margin: 0 0 7px;
+  text-align: center;
+}
+
+.fo-auth__sub {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted);
+  text-align: center;
+  margin: 0 0 24px;
+}
+
+.fo-auth__foot {
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 20px;
+}
+
+.fo-auth__foot a {
+  color: var(--blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.fo-auth__foot a:hover {
+  text-decoration: underline;
+}
+
+.fo-auth__forgot {
+  text-align: right;
+  margin: -4px 0 18px;
+}
+
+.fo-auth__forgot a {
+  color: var(--blue);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.fo-auth__forgot a:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------- fields */
+
+.fo-field {
+  margin-bottom: 16px;
+}
+
+.fo-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 650;
+  margin-bottom: 7px;
+  color: var(--navy);
+}
+
+.fo-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fo-input {
+  width: 100%;
+  font: inherit;
+  font-size: 14.5px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: var(--fo-input);
+  color: var(--navy);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.fo-input::placeholder {
+  color: var(--fo-placeholder);
+}
+
+.fo-input:focus {
+  outline: none;
+  border-color: var(--blue);
+  background: var(--white);
+  box-shadow: 0 0 0 4px var(--fo-blue-ring);
+}
+
+.fo-input--invalid {
+  border-color: var(--red);
+}
+
+.fo-input--with-toggle {
+  padding-right: 62px;
+}
+
+.fo-toggle {
+  position: absolute;
+  right: 8px;
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--blue);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 650;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 7px;
+}
+
+.fo-toggle:hover {
+  background: var(--fo-blue-hover);
+}
+
+.fo-hint {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 7px 0 0;
+}
+
+.fo-field-error {
+  font-size: 12.5px;
+  color: var(--red);
+  margin: 7px 0 0;
+}
+
+/* ------------------------------------------------------- password strength */
+
+.fo-strength {
+  margin-top: 10px;
+}
+
+.fo-strength__track {
+  display: flex;
+  gap: 5px;
+  height: 5px;
+}
+
+.fo-strength__seg {
+  flex: 1;
+  border-radius: 3px;
+  background: var(--line);
+  transition: background 0.2s ease;
+}
+
+.fo-strength__seg--on-1 {
+  background: var(--red);
+}
+
+.fo-strength__seg--on-2 {
+  background: var(--orange);
+}
+
+.fo-strength__seg--on-3 {
+  background: var(--fo-strength-mid);
+}
+
+.fo-strength__seg--on-4 {
+  background: var(--green);
+}
+
+.fo-strength__label {
+  font-size: 12px;
+  font-weight: 650;
+  margin-top: 7px;
+}
+
+/* --------------------------------------------------------------- checkbox */
+
+.fo-check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--fo-body);
+  margin: 4px 0 20px;
+  cursor: pointer;
+}
+
+.fo-check input {
+  width: 17px;
+  height: 17px;
+  margin: 1px 0 0;
+  accent-color: var(--blue);
+  cursor: pointer;
+  flex: none;
+}
+
+.fo-check a {
+  color: var(--blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------- messages */
+
+.fo-error {
+  background: var(--fo-error-bg);
+  border: 1px solid var(--fo-error-line);
+  color: var(--fo-error-ink);
+  font-size: 13.5px;
+  border-radius: 10px;
+  padding: 11px 13px;
+  margin-bottom: 16px;
+}
+
+.fo-notice {
+  background: var(--fo-notice-bg);
+  border: 1px solid var(--fo-notice-line);
+  color: var(--fo-notice-ink);
+  font-size: 13.5px;
+  border-radius: 10px;
+  padding: 11px 13px;
+  margin-bottom: 16px;
+}
+
+.fo-devnote {
+  background: var(--fo-devnote-bg);
+  border: 1px dashed var(--fo-devnote-line);
+  color: var(--fo-devnote-ink);
+  font-size: 13px;
+  border-radius: 10px;
+  padding: 11px 13px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.fo-devnote strong {
+  letter-spacing: 0.14em;
+  font-size: 15px;
+}
+
+/* --------------------------------------------------------------- divider */
+
+.fo-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 12.5px;
+  margin: 20px 0;
+}
+
+.fo-divider::before,
+.fo-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* ------------------------------------------------------------ code input */
+
+.fo-code {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 6px 0 4px;
+}
+
+.fo-code__box {
+  width: 52px;
+  height: 60px;
+  text-align: center;
+  font: inherit;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--navy);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--fo-input);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.fo-code__box:focus {
+  outline: none;
+  border-color: var(--blue);
+  background: var(--white);
+  box-shadow: 0 0 0 4px var(--fo-blue-ring);
+}
+
+.fo-code__box--filled {
+  border-color: var(--blue);
+  background: var(--white);
+}
+
+.fo-mail {
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.fo-actions-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.fo-link-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--blue);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 650;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.fo-link-btn:hover:not(:disabled) {
+  background: var(--fo-blue-hover);
+}
+
+.fo-link-btn:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------ onboarding */
+
+.fo-steps {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.fo-step {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 13.5px;
+  font-weight: 700;
+  background: var(--white);
+  border: 1.5px solid var(--line);
+  color: var(--muted);
+}
+
+.fo-step--active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--fo-on-blue);
+  box-shadow: 0 6px 16px var(--fo-blue-ring);
+}
+
+.fo-step--done {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--fo-on-green);
+}
+
+.fo-step-count {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+.fo-textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 14.5px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: var(--fo-input);
+  color: var(--navy);
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.fo-textarea::placeholder {
+  color: var(--fo-placeholder);
+}
+
+.fo-textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+  background: var(--white);
+  box-shadow: 0 0 0 4px var(--fo-blue-ring);
+}
+
+.fo-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.fo-chip {
+  appearance: none;
+  font: inherit;
+  font-size: 12.5px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--fo-body);
+  cursor: pointer;
+  text-align: left;
+}
+
+.fo-chip:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.fo-sectors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.fo-sector {
+  appearance: none;
+  font: inherit;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--white);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.12s ease;
+}
+
+.fo-sector:hover {
+  border-color: var(--blue);
+  transform: translateY(-1px);
+}
+
+.fo-sector--selected {
+  border-color: var(--blue);
+  background: var(--fo-blue-soft);
+  box-shadow: 0 0 0 3px var(--fo-blue-ring);
+}
+
+.fo-sector__text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.fo-sector__name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.fo-sector__brief {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.fo-sector__tick {
+  color: var(--blue);
+  font-weight: 800;
+}
+
+.fo-step-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+/* ------------------------------------------------------------ responsive */
+
+@media (max-width: 900px) {
+  .fo-hero {
+    grid-template-columns: 1fr;
+    gap: 34px;
+    padding: 44px 22px 26px;
+  }
+
+  .fo-iso {
+    height: 260px;
+    order: -1;
+  }
+
+  .fo-topbar,
+  .fo-section,
+  .fo-footer {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .fo-auth__card {
+    padding: 24px 20px;
+  }
+
+  .fo-code__box {
+    width: 44px;
+    height: 54px;
+    font-size: 21px;
+  }
+
+  .fo-brand span:last-child {
+    display: none;
+  }
+}
