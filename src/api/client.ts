@@ -83,7 +83,9 @@ export async function api<T>(path: string, options: RequestOptions = {}): Promis
         ? record.error
         : typeof record.message === 'string'
           ? record.message
-          : `Request failed (${response.status})`
+          : response.status === 404
+            ? 'The API endpoint was not found. Check the deployment API routing.'
+            : `Request failed (${response.status})`
     throw new ApiError(response.status, message, record.details)
   }
 

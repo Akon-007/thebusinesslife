@@ -198,7 +198,7 @@ The API runs TypeScript through `tsx` at runtime. A custom backend installation 
 ```text
 .
 ├── api/
-│   └── [...path].ts          # Vercel same-origin API proxy
+│   └── proxy.ts              # Vercel same-origin API proxy
 ├── server/
 │   ├── app.ts               # Express app and route mounting
 │   ├── index.ts             # API listener, startup seed, clock lifecycle
@@ -457,3 +457,7 @@ Never include personal data, production secrets, generated build output, or data
 ## License
 
 No license file is currently included in this repository. Do not assume permission to redistribute or reuse the project under an open-source license; contact the repository owner for licensing terms.
+
+### Diagnosing deployed API routing
+
+`vercel.json` explicitly rewrites `/api/:path*` to `api/proxy.ts` before the SPA fallback. A generic non-JSON 404 on login means the request may not have reached Express. After deploying routing changes, check `/api/health` on the Vercel domain: responses handled by the proxy include `X-Businesslife-Proxy: 1`. If that header is missing, verify the deployment branch, repository root, and inclusion of `vercel.json` and `api/proxy.ts`. If the proxy returns 503, configure `API_ORIGIN` and redeploy. A 502 with an unexpected backend response means the configured host is not serving the expected JSON API. Proxy failures log the method, API path, and upstream status without credentials or request bodies.
